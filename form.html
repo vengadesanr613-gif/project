@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hospital Management System</title>
+
+    <style>
+        body {
+            background-color: bisque;
+            font-family: Arial;
+        }
+
+        h1, p {
+            text-align: center;
+        }
+
+        form {
+            margin-left: 40px;
+        }
+
+        #msg {
+            color: green;
+            font-weight: bold;
+            margin-left: 40px;
+            margin-top: 10px;
+        }
+    </style>
+
+    <script>
+        function showMessage() {
+            var email = document.getElementById("email").value;
+            var pass = document.getElementById("pass").value;
+
+            if (email == "" || pass == "") {
+                alert("Please fill email and password");
+                return false;
+            }
+
+            if (pass.length < 6) {
+                alert("Password must be at least 6 characters");
+                return false;
+            }
+
+            document.getElementById("msg").innerHTML = "Registration Successful!";
+            return false; 
+        }
+    </script>
+</head>
+
+<body>
+
+    <h1>ABC Hospital</h1>
+    <p><b>Welcome to Our Hospital Management System</b></p>
+
+    <h2 style="margin-left:40px;">Patient Registration</h2>
+
+    <form onsubmit="return showMessage()">
+
+        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/493/181/small/hospital-building-for-healthcare-background-illustration-with-ambulance-car-doctor-patient-nurses-and-medical-clinic-exterior-free-vector.jpg"
+             height="100"><br><br>
+
+        Patient Name: <input type="text" required><br><br>
+        Age: <input type="number" required><br><br>
+        Date: <input type="date" required><br><br>
+
+        Gender:
+        <input type="radio" name="g" required> Male
+        <input type="radio" name="g"> Female<br><br>
+
+        Disease: <input type="text" required><br><br>
+
+        Doctor:
+        <select required>
+            <option>Dr. Smith</option>
+            <option>Dr. Pradeep</option>
+            <option>Dr. Vani</option>
+        </select><br><br>
+
+        Email: <input type="email" id="email" required><br><br>
+        Password: <input type="password" id="pass" required><br><br>
+
+        <input type="submit" value="Register">
+        <input type="reset" value="Clear">
+
+    </form>
+
+    <div id="msg"></div>
+
+</body>
+</html>

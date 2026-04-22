@@ -1,0 +1,10 @@
+CREATE DATABASE student_app;
+USE student_app;
+
+CREATE TABLE students (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    email VARCHAR(100),
+    username VARCHAR(50),
+    password VARCHAR(50)
+);
