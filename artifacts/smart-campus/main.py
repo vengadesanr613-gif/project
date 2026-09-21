@@ -27,72 +27,105 @@ if BUILT_PUBLIC_DIR.exists():
     app.mount("/assets", StaticFiles(directory=BUILT_PUBLIC_DIR / "assets"), name="assets")
 
 
-# Coordinates are intentionally close together so the sample campus renders
-# as a compact, walkable area on OpenStreetMap.
+# Thiagarajar College of Engineering is in Thiruparankundram, Madurai.
+# The campus anchor and bounds are based on the college's OpenStreetMap
+# location; building waypoints are kept within the campus footprint.
 CAMPUS_NODES: dict[str, dict[str, Any]] = {
     "gate": {
-        "name": "Main Gate",
-        "short_name": "Gate",
-        "latitude": 12.9719,
-        "longitude": 77.5937,
-        "description": "The main entrance to campus",
+        "name": "TCE Main Gate",
+        "short_name": "Main Gate",
+        "latitude": 9.8814,
+        "longitude": 78.0832,
+        "description": "The main entrance to Thiagarajar College of Engineering",
     },
     "admin": {
-        "name": "Administration Block",
+        "name": "TCE Administration Block",
         "short_name": "Admin",
-        "latitude": 12.9728,
-        "longitude": 77.5947,
-        "description": "Student services and administration",
+        "latitude": 9.8821,
+        "longitude": 78.0822,
+        "description": "Principal's office, administration, and student services",
     },
-    "fountain": {
-        "name": "Central Fountain",
-        "short_name": "Fountain",
-        "latitude": 12.9738,
-        "longitude": 77.5940,
-        "description": "The central campus landmark",
+    "library": {
+        "name": "Thiagarajar Central Library",
+        "short_name": "Library",
+        "latitude": 9.8831,
+        "longitude": 78.0816,
+        "description": "Central library and study spaces",
     },
     "cse": {
         "name": "CSE Department",
         "short_name": "CSE",
-        "latitude": 12.9745,
-        "longitude": 77.5951,
+        "latitude": 9.8841,
+        "longitude": 78.0809,
         "description": "Computer Science and Engineering",
     },
+    "ece": {
+        "name": "ECE Department",
+        "short_name": "ECE",
+        "latitude": 9.8834,
+        "longitude": 78.0830,
+        "description": "Electronics and Communication Engineering",
+    },
     "auditorium": {
-        "name": "Open Air Auditorium",
+        "name": "TCE Main Auditorium",
         "short_name": "Auditorium",
-        "latitude": 12.9752,
-        "longitude": 77.5938,
-        "description": "Talks, performances, and campus gatherings",
+        "latitude": 9.8818,
+        "longitude": 78.0815,
+        "description": "Talks, performances, and college gatherings",
     },
     "canteen": {
-        "name": "Campus Canteen",
+        "name": "TCE Campus Canteen",
         "short_name": "Canteen",
-        "latitude": 12.9731,
-        "longitude": 77.5960,
-        "description": "Meals, snacks, and a shaded seating area",
+        "latitude": 9.8808,
+        "longitude": 78.0819,
+        "description": "Meals, snacks, and student seating",
+    },
+    "hostel": {
+        "name": "TCE Hostel Block",
+        "short_name": "Hostel",
+        "latitude": 9.8794,
+        "longitude": 78.0806,
+        "description": "Student residence and hostel services",
+    },
+    "tbi": {
+        "name": "TCE AICTE Idea Lab",
+        "short_name": "Idea Lab",
+        "latitude": 9.8838,
+        "longitude": 78.0826,
+        "description": "Innovation, prototyping, and entrepreneurship space",
+    },
+    "sports": {
+        "name": "TCE Sports Ground",
+        "short_name": "Sports",
+        "latitude": 9.8796,
+        "longitude": 78.0839,
+        "description": "Sports facilities and outdoor campus activity",
     },
 }
 
 # Undirected walking graph. Weights are approximate walking minutes.
 GRAPH: dict[str, list[tuple[str, int]]] = {
-    "gate": [("admin", 3), ("fountain", 4)],
-    "admin": [("gate", 3), ("fountain", 2), ("cse", 5)],
-    "fountain": [("gate", 4), ("admin", 2), ("cse", 4), ("auditorium", 4)],
-    "cse": [("admin", 5), ("fountain", 4), ("canteen", 3), ("auditorium", 3)],
-    "auditorium": [("fountain", 4), ("cse", 3), ("canteen", 5)],
-    "canteen": [("cse", 3), ("auditorium", 5)],
+    "gate": [("admin", 3), ("canteen", 4), ("sports", 5)],
+    "admin": [("gate", 3), ("library", 3), ("ece", 3), ("tbi", 4)],
+    "library": [("admin", 3), ("cse", 3), ("auditorium", 4), ("tbi", 3)],
+    "cse": [("library", 3), ("auditorium", 5), ("tbi", 3)],
+    "ece": [("admin", 3), ("tbi", 2), ("canteen", 4)],
+    "auditorium": [("library", 4), ("cse", 5), ("canteen", 3), ("hostel", 4)],
+    "canteen": [("gate", 4), ("ece", 4), ("auditorium", 3), ("hostel", 3)],
+    "hostel": [("canteen", 3), ("auditorium", 4), ("sports", 3)],
+    "tbi": [("admin", 4), ("library", 3), ("cse", 3), ("ece", 2)],
+    "sports": [("gate", 5), ("hostel", 3)],
 }
 
 ACTIVE_EVENTS = [
     {
         "id": "innovation-week",
         "title": "Innovation Week Showcase",
-        "location": "Open Air Auditorium",
+        "location": "TCE Main Auditorium",
         "location_key": "auditorium",
         "time": "Today · 4:00 PM",
         "category": "Campus",
-        "description": "Student teams present prototypes and research demos.",
+        "description": "Student teams present prototypes and research demos at TCE.",
         "accent": "violet",
     },
     {
@@ -102,17 +135,17 @@ ACTIVE_EVENTS = [
         "location_key": "cse",
         "time": "Today · 6:30 PM",
         "category": "Workshop",
-        "description": "Bring your project and pair with a peer mentor.",
+        "description": "Bring your project and pair with a peer mentor at TCE.",
         "accent": "cyan",
     },
     {
         "id": "community-lunch",
         "title": "Community Lunch",
-        "location": "Campus Canteen",
+        "location": "TCE Campus Canteen",
         "location_key": "canteen",
         "time": "Tomorrow · 1:00 PM",
         "category": "Community",
-        "description": "A shared table for clubs, societies, and new students.",
+        "description": "A shared table for TCE clubs, societies, and new students.",
         "accent": "amber",
     },
 ]
@@ -151,15 +184,23 @@ def shortest_path(start: str, destination: str) -> tuple[list[str], int]:
 
 def walking_direction(start: str, end: str) -> str:
     labels = {
-        ("gate", "admin"): "Walk east along the main approach",
-        ("gate", "fountain"): "Follow the central path toward the fountain",
-        ("admin", "fountain"): "Continue south toward the central fountain",
-        ("admin", "cse"): "Follow the academic wing east",
-        ("fountain", "cse"): "Take the academic path northeast",
-        ("fountain", "auditorium"): "Continue north past the fountain",
-        ("cse", "canteen"): "Walk south toward the dining courtyard",
-        ("cse", "auditorium"): "Follow the path north to the auditorium",
+        ("gate", "admin"): "Walk west along the main approach",
+        ("gate", "canteen"): "Follow the south path toward the canteen",
+        ("gate", "sports"): "Take the east path toward the sports ground",
+        ("admin", "library"): "Continue northwest toward the central library",
+        ("admin", "ece"): "Follow the academic path south",
+        ("admin", "tbi"): "Walk toward the innovation wing",
+        ("library", "cse"): "Continue north toward the CSE department",
+        ("library", "auditorium"): "Follow the west path to the auditorium",
+        ("library", "tbi"): "Take the path toward the Idea Lab",
+        ("cse", "auditorium"): "Follow the south path to the auditorium",
+        ("cse", "tbi"): "Walk southeast toward the Idea Lab",
+        ("ece", "tbi"): "Continue north toward the Idea Lab",
+        ("ece", "canteen"): "Walk south toward the dining area",
         ("auditorium", "canteen"): "Take the east path toward the canteen",
+        ("auditorium", "hostel"): "Follow the south path toward the hostel block",
+        ("canteen", "hostel"): "Continue south toward the hostel block",
+        ("hostel", "sports"): "Walk east toward the sports ground",
     }
     return labels.get((start, end), f"Walk from {CAMPUS_NODES[start]['name']} toward {CAMPUS_NODES[end]['name']}")
 
@@ -172,11 +213,23 @@ def navigation_route(destination: str = Query(..., min_length=1)) -> dict[str, A
         "entrance": "gate",
         "administration": "admin",
         "administration-block": "admin",
-        "central-fountain": "fountain",
+        "tce-administration-block": "admin",
+        "thiagarajar-central-library": "library",
+        "library": "library",
         "computer-science": "cse",
         "cse-department": "cse",
-        "open-air-auditorium": "auditorium",
+        "electronics-and-communication-engineering": "ece",
+        "ece-department": "ece",
+        "main-auditorium": "auditorium",
+        "tce-main-auditorium": "auditorium",
         "campus-canteen": "canteen",
+        "tce-campus-canteen": "canteen",
+        "hostel-block": "hostel",
+        "tce-hostel-block": "hostel",
+        "tce-aicte-idea-lab": "tbi",
+        "idea-lab": "tbi",
+        "sports-ground": "sports",
+        "tce-sports-ground": "sports",
     }
     normalized_destination = aliases.get(normalized_destination, normalized_destination)
 

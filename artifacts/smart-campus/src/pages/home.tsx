@@ -52,11 +52,15 @@ declare global {
 }
 
 const destinations = [
-  { name: 'Administration Block', detail: 'Student services and administration', icon: Building2 },
-  { name: 'Central Fountain', detail: 'The central campus landmark', icon: Compass },
+  { name: 'TCE Administration Block', detail: 'Principal, administration, and student services', icon: Building2 },
+  { name: 'Thiagarajar Central Library', detail: 'Central library and study spaces', icon: Compass },
   { name: 'CSE Department', detail: 'Computer Science and Engineering', icon: Sparkles },
-  { name: 'Open Air Auditorium', detail: 'Talks, performances, and gatherings', icon: Accessibility },
-  { name: 'Campus Canteen', detail: 'Meals, snacks, and shaded seating', icon: MapPin },
+  { name: 'ECE Department', detail: 'Electronics and Communication Engineering', icon: Accessibility },
+  { name: 'TCE Main Auditorium', detail: 'Talks, performances, and college gatherings', icon: MapPin },
+  { name: 'TCE Campus Canteen', detail: 'Meals, snacks, and student seating', icon: MapPin },
+  { name: 'TCE Hostel Block', detail: 'Student residence and hostel services', icon: Building2 },
+  { name: 'TCE AICTE Idea Lab', detail: 'Innovation and prototyping space', icon: Sparkles },
+  { name: 'TCE Sports Ground', detail: 'Sports facilities and outdoor activity', icon: Compass },
 ];
 
 function asRecord(value: unknown): Record<string, any> {
@@ -176,7 +180,7 @@ function MapSurface({ route, onLocate }: { route: RouteResult | null; onLocate: 
         link.dataset.leafletCss = 'true';
         document.head.appendChild(link);
       }
-      map = L.map(elementRef.current, { zoomControl: false, attributionControl: true }).setView([12.9738, 77.5948], 17);
+      map = L.map(elementRef.current, { zoomControl: false, attributionControl: true }).setView([9.8816, 78.0834], 17);
       L.control.zoom({ position: 'bottomright' }).addTo(map);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 20,
@@ -384,8 +388,8 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <button type="button" className="grid h-10 w-10 place-items-center rounded-xl border border-border bg-card text-primary md:hidden" aria-label="Open menu" data-testid="button-open-menu"><Menu className="h-5 w-5" /></button>
               <div>
-                <p className="font-mono text-[10px] font-medium uppercase tracking-[.22em] text-muted-foreground">Campus / wayfinder</p>
-                <h1 className="mt-1 text-xl font-extrabold tracking-[-.04em] text-foreground sm:text-2xl">Good morning, Alex<span className="text-secondary-foreground">.</span></h1>
+                <p className="font-mono text-[10px] font-medium uppercase tracking-[.22em] text-muted-foreground">TCE / campus wayfinder</p>
+                <h1 className="mt-1 text-xl font-extrabold tracking-[-.04em] text-foreground sm:text-2xl">Good morning, TCE student<span className="text-secondary-foreground">.</span></h1>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -441,8 +445,8 @@ export default function Home() {
               </div>
               <div className="rounded-[1.35rem] border border-primary/15 bg-primary p-5 text-primary-foreground shadow-md">
                 <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.18em] text-primary-foreground/65"><CheckCircle2 className="h-3.5 w-3.5" /> Campus note</div>
-                <p className="mt-3 text-sm font-semibold leading-6">Stay on the marked path. Accessible entrances are shown whenever the campus data provides them.</p>
-                <div className="mt-4 h-px bg-primary-foreground/15" /><p className="mt-3 font-mono text-[10px] text-primary-foreground/60">UPDATED FROM CAMPUS SERVICES</p>
+                <p className="mt-3 text-sm font-semibold leading-6">Find departments, facilities, hostels, and campus services across Thiagarajar College of Engineering.</p>
+                <div className="mt-4 h-px bg-primary-foreground/15" /><p className="mt-3 font-mono text-[10px] text-primary-foreground/60">THIRUPPARANKUNDRAM · MADURAI</p>
               </div>
             </aside>
           </div>
