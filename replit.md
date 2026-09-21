@@ -1,44 +1,46 @@
-# [Project name]
+# Smart Campus Voice Assistant
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A FastAPI-powered campus wayfinding app with Dijkstra routing, OpenStreetMap maps, live events, and browser voice guidance.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/smart-campus run dev` — build the React page, then run FastAPI/Uvicorn for the campus app
+- `uvicorn main:app --host 0.0.0.0 --port 8080` — run the Python API directly from `artifacts/smart-campus`
 - `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- `PORT=21691 BASE_PATH=/ pnpm --filter @workspace/smart-campus run build` — build the web page outside the managed workflow
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- API: FastAPI + Uvicorn
+- Frontend: React + Vite + Leaflet
+- Routing: Python `heapq` Dijkstra shortest path
+- Voice: Web Speech API (speech recognition + speech synthesis)
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/smart-campus/main.py` — FastAPI app, campus graph, Dijkstra routing, events, and root page serving
+- `artifacts/smart-campus/src/pages/home.tsx` — map, destination search, event cards, and voice drawer
+- `artifacts/smart-campus/src/index.css` — campus visual language and responsive layout
+- `artifacts/smart-campus/requirements.txt` — Python runtime dependencies
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- The main gate is the route origin so each request returns a deterministic walking path.
+- The Vite build is served by FastAPI so `/`, `/navigation-route`, and `/events` stay same-origin.
+- Leaflet and leaflet-polylinedecorator load in the browser from CDN; the route still renders without the decorator if that CDN is unavailable.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+Students and visitors can choose a campus destination, see a shortest walking route with directional arrows, read step-by-step guidance aloud, use browser voice input, and browse active events.
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- Keep frontend requests relative so the page and FastAPI routes share one origin.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- The managed web workflow builds Vite before starting Uvicorn so FastAPI can serve the compiled assets.
 
 ## Pointers
 
