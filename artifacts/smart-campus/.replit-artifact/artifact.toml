@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Smart Campus Voice Assistant"
+description = "A campus navigation assistant that combines shortest-path directions, live event discovery, an interactive map, and hands-free voice guidance for students and visitors."
+version = "1.0.0"
+id = "artifacts/smart-campus"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21691
+
+[services.development]
+run = "pnpm --filter @workspace/smart-campus run build && python -m uvicorn main:app --app-dir artifacts/smart-campus --host 0.0.0.0 --port $PORT"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/smart-campus", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/smart-campus/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21691"
+BASE_PATH = "/"

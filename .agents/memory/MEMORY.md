@@ -1,0 +1,1 @@
+- [FastAPI and Vite static serving](fastapi-vite-static-serving.md) — build the frontend before Uvicorn and mount compiled assets for same-origin routing.
